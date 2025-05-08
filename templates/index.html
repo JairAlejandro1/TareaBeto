@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Científica RMI Web</title>
+    <title>Calculadora Científica Casio-Style RMI Web</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <!-- Incluimos Bootstrap para un diseño responsive -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -20,9 +20,9 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10 col-lg-8">
+            <div class="col-md-10 col-lg-10">
                 <div class="calculator-container fade-in">
-                    <h1 class="text-center mb-4">✨ Calculadora Científica RMI ✨</h1>
+                    <h1 class="text-center mb-4">✨ Calculadora Científica CASIO Style ✨</h1>
                     
                     <!-- Panel de estado de conexión -->
                     <div id="connection-status" class="alert alert-info mb-4">
@@ -66,6 +66,48 @@
                                     </div>
                                 </div>
                                 
+                                <!-- Panel para operaciones estadísticas -->
+                                <div id="panel-estadistico" class="mb-3" style="display:none;">
+                                    <label for="valores-estadisticos" class="form-label">Valores (separados por comas):</label>
+                                    <textarea class="form-control" id="valores-estadisticos" rows="3" placeholder="Ej: 1.5, 2.3, 4.7, 8.2"></textarea>
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" id="checkPoblacion" checked>
+                                        <label class="form-check-label" for="checkPoblacion">
+                                            Datos de población (desmarca para muestra)
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Panel para cálculos financieros -->
+                                <div id="panel-financiero" class="mb-3" style="display:none;">
+                                    <div class="row">
+                                        <div class="col-md-4 mb-2">
+                                            <label for="principal" class="form-label">Capital inicial:</label>
+                                            <input type="number" class="form-control" id="principal" step="any" placeholder="Ej: 1000">
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label for="tasa" class="form-label">Tasa de interés (%):</label>
+                                            <input type="number" class="form-control" id="tasa" step="any" placeholder="Ej: 5.5">
+                                        </div>
+                                        <div class="col-md-4 mb-2">
+                                            <label for="tiempo" class="form-label">Tiempo (años):</label>
+                                            <input type="number" class="form-control" id="tiempo" step="any" placeholder="Ej: 2">
+                                        </div>
+                                    </div>
+                                    <div id="contenedor-periodos" class="row" style="display:none;">
+                                        <div class="col-md-6">
+                                            <label for="periodos" class="form-label">Periodos por año:</label>
+                                            <select class="form-select" id="periodos">
+                                                <option value="1">Anual (1)</option>
+                                                <option value="2">Semestral (2)</option>
+                                                <option value="4">Trimestral (4)</option>
+                                                <option value="12" selected>Mensual (12)</option>
+                                                <option value="365">Diario (365)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <!-- Pestañas para diferentes grupos de operaciones -->
                                 <ul class="nav nav-tabs mb-3" id="operationsTabs" role="tablist">
                                     <li class="nav-item" role="presentation">
@@ -76,6 +118,15 @@
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button" role="tab" aria-controls="advanced" aria-selected="false">Avanzadas</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="stat-tab" data-bs-toggle="tab" data-bs-target="#stat" type="button" role="tab" aria-controls="stat" aria-selected="false">Estadísticas</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="financial-tab" data-bs-toggle="tab" data-bs-target="#financial" type="button" role="tab" aria-controls="financial" aria-selected="false">Financieras</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="convert-tab" data-bs-toggle="tab" data-bs-target="#convert" type="button" role="tab" aria-controls="convert" aria-selected="false">Conversión</button>
                                     </li>
                                 </ul>
                                 
@@ -95,6 +146,18 @@
                                             </button>
                                             <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="division" data-binary="true">
                                                 <i class="me-1">÷</i> División
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="potencia" data-binary="true">
+                                                <i class="me-1">x<sup>y</sup></i> Potencia
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="raiz" data-binary="true">
+                                                <i class="me-1"><sup>n</sup>√x</i> Raíz
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="modulo" data-binary="true">
+                                                <i class="me-1">mod</i> Módulo
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="porcentaje" data-binary="true">
+                                                <i class="me-1">%</i> Porcentaje
                                             </button>
                                         </div>
                                     </div>
@@ -120,23 +183,147 @@
                                             <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="arcotangente" data-binary="false">
                                                 <i class="me-1">arctan</i>
                                             </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="arcotangente2" data-binary="true">
+                                                <i class="me-1">arctan2</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="seno_hiperbolico" data-binary="false">
+                                                <i class="me-1">sinh</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="coseno_hiperbolico" data-binary="false">
+                                                <i class="me-1">cosh</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="tangente_hiperbolica" data-binary="false">
+                                                <i class="me-1">tanh</i>
+                                            </button>
                                         </div>
                                     </div>
                                     
                                     <!-- Operaciones avanzadas -->
                                     <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
                                         <div class="d-flex justify-content-between flex-wrap">
-                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="potencia" data-binary="true">
-                                                <i class="me-1">x<sup>y</sup></i> Potencia
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="logaritmo_natural" data-binary="false">
+                                                <i class="me-1">ln</i>
                                             </button>
-                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="raiz" data-binary="true">
-                                                <i class="me-1"><sup>n</sup>√x</i> Raíz
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="logaritmo_base10" data-binary="false">
+                                                <i class="me-1">log</i>
                                             </button>
                                             <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="logaritmo" data-binary="true">
-                                                <i class="me-1">log<sub>b</sub>(x)</i> Logaritmo
+                                                <i class="me-1">log<sub>b</sub>(x)</i>
                                             </button>
                                             <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="factorial" data-binary="false">
-                                                <i class="me-1">n!</i> Factorial
+                                                <i class="me-1">n!</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="valor_absoluto" data-binary="false">
+                                                <i class="me-1">|x|</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="exponencial" data-binary="false">
+                                                <i class="me-1">e<sup>x</sup></i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="potencia_10" data-binary="false">
+                                                <i class="me-1">10<sup>x</sup></i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="reciproco" data-binary="false">
+                                                <i class="me-1">1/x</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="parte_entera" data-binary="false">
+                                                <i class="me-1">Int</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="parte_decimal" data-binary="false">
+                                                <i class="me-1">Frac</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="piso" data-binary="false">
+                                                <i class="me-1">⌊x⌋</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="techo" data-binary="false">
+                                                <i class="me-1">⌈x⌉</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="redondear" data-binary="true">
+                                                <i class="me-1">Round</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="notacion_cientifica" data-binary="false">
+                                                <i class="me-1">Sci</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="combinatoria" data-binary="true">
+                                                <i class="me-1">nCr</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="permutacion" data-binary="true">
+                                                <i class="me-1">nPr</i>
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Constantes matemáticas -->
+                                        <div class="mt-3">
+                                            <h5>Constantes:</h5>
+                                            <div class="d-flex justify-content-start flex-wrap">
+                                                <button type="button" class="btn btn-outline-primary me-2 mb-2 constante-btn" data-constante="pi">
+                                                    <i class="me-1">π</i>
+                                                </button>
+                                                <button type="button" class="btn btn-outline-primary me-2 mb-2 constante-btn" data-constante="e">
+                                                    <i class="me-1">e</i>
+                                                </button>
+                                                <button type="button" class="btn btn-outline-primary me-2 mb-2 constante-btn" data-constante="phi">
+                                                    <i class="me-1">φ</i>
+                                                </button>
+                                                <button type="button" class="btn btn-outline-primary me-2 mb-2 constante-btn" data-constante="gamma">
+                                                    <i class="me-1">γ</i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Operaciones estadísticas -->
+                                    <div class="tab-pane fade" id="stat" role="tabpanel" aria-labelledby="stat-tab">
+                                        <div class="d-flex justify-content-between flex-wrap">
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="media" data-type="estadistica">
+                                                <i class="me-1">Media</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="mediana" data-type="estadistica">
+                                                <i class="me-1">Mediana</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="moda" data-type="estadistica">
+                                                <i class="me-1">Moda</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="desviacion_estandar" data-type="estadistica">
+                                                <i class="me-1">σ</i> Desviación Est.
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="varianza" data-type="estadistica">
+                                                <i class="me-1">σ<sup>2</sup></i> Varianza
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="aleatorio" data-binary="true">
+                                                <i class="me-1">Rand</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Operaciones financieras -->
+                                    <div class="tab-pane fade" id="financial" role="tabpanel" aria-labelledby="financial-tab">
+                                        <div class="d-flex justify-content-between flex-wrap">
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="interes_simple" data-type="financiera">
+                                                <i class="me-1">Simple</i> Interés Simple
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="interes_compuesto" data-type="financiera">
+                                                <i class="me-1">Comp.</i> Interés Compuesto
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="cambio_porcentual" data-binary="true">
+                                                <i class="me-1">Δ%</i> Cambio %
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Operaciones de conversión -->
+                                    <div class="tab-pane fade" id="convert" role="tabpanel" aria-labelledby="convert-tab">
+                                        <div class="d-flex justify-content-between flex-wrap">
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="grados_a_radianes" data-binary="false">
+                                                <i class="me-1">°→rad</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="radianes_a_grados" data-binary="false">
+                                                <i class="me-1">rad→°</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="fraccion_a_decimal" data-binary="true">
+                                                <i class="me-1">a/b→Dec</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="decimal_a_fraccion" data-binary="false">
+                                                <i class="me-1">Dec→a/b</i>
                                             </button>
                                         </div>
                                     </div>
@@ -145,6 +332,7 @@
                                 <div class="result-container mt-4">
                                     <h3 class="text-center mb-1">Resultado</h3>
                                     <div id="result">-</div>
+                                    <div id="result-details" class="mt-2 small" style="display:none;"></div>
                                 </div>
                             </form>
                         </div>
@@ -185,21 +373,33 @@
             const connectionStatus = document.getElementById('connection-status');
             const operationBtns = document.querySelectorAll('.operation-btn');
             const resultDisplay = document.getElementById('result');
+            const resultDetails = document.getElementById('result-details');
             const resultContainer = document.querySelector('.result-container');
             const num1Input = document.getElementById('num1');
             const num2Input = document.getElementById('num2');
             const numUnarioInput = document.getElementById('num-unario');
+            const valoresEstadisticosInput = document.getElementById('valores-estadisticos');
+            const checkPoblacion = document.getElementById('checkPoblacion');
             const refreshHistoryBtn = document.getElementById('refresh-history');
             const historyContainer = document.getElementById('history-container');
             const modoAngular = document.getElementById('modoAngular');
             const modoTexto = document.getElementById('modoTexto');
             const panelUnario = document.getElementById('panel-unario');
             const panelBinario = document.getElementById('panel-binario');
+            const panelEstadistico = document.getElementById('panel-estadistico');
+            const panelFinanciero = document.getElementById('panel-financiero');
+            const contenedorPeriodos = document.getElementById('contenedor-periodos');
+            const principalInput = document.getElementById('principal');
+            const tasaInput = document.getElementById('tasa');
+            const tiempoInput = document.getElementById('tiempo');
+            const periodosSelect = document.getElementById('periodos');
+            const constanteBtns = document.querySelectorAll('.constante-btn');
             
             // Estado inicial para operaciones (binarias por defecto)
             let operacionActual = {
                 esBinaria: true,
-                enGrados: false
+                enGrados: false,
+                tipo: 'normal' // normal, estadistica, financiera
             };
             
             // Ocultar panel unario inicialmente
@@ -219,15 +419,54 @@
                 btn.addEventListener('click', function() {
                     const operation = this.getAttribute('data-operation');
                     const esBinaria = this.getAttribute('data-binary') === 'true';
+                    const tipo = this.getAttribute('data-type') || 'normal';
                     
                     // Actualizar el estado de la operación
                     operacionActual.esBinaria = esBinaria;
+                    operacionActual.tipo = tipo;
                     
-                    // Mostrar el panel correspondiente
-                    panelUnario.style.display = esBinaria ? 'none' : 'block';
-                    panelBinario.style.display = esBinaria ? 'block' : 'none';
+                    // Mostrar el panel correspondiente según el tipo de operación
+                    panelUnario.style.display = 'none';
+                    panelBinario.style.display = 'none';
+                    panelEstadistico.style.display = 'none';
+                    panelFinanciero.style.display = 'none';
+                    contenedorPeriodos.style.display = 'none';
+                    
+                    if (tipo === 'normal') {
+                        if (esBinaria) {
+                            panelBinario.style.display = 'block';
+                        } else {
+                            panelUnario.style.display = 'block';
+                        }
+                    } else if (tipo === 'estadistica') {
+                        panelEstadistico.style.display = 'block';
+                    } else if (tipo === 'financiera') {
+                        panelFinanciero.style.display = 'block';
+                        // Mostrar contenedor de periodos solo para interés compuesto
+                        if (operation === 'interes_compuesto') {
+                            contenedorPeriodos.style.display = 'block';
+                        }
+                    }
                     
                     performCalculation(operation);
+                });
+            });
+            
+            // Configurar los botones de constantes
+            constanteBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const constante = this.getAttribute('data-constante');
+                    
+                    // Mostrar la constante en el input adecuado
+                    if (operacionActual.esBinaria) {
+                        if (document.activeElement === num2Input) {
+                            fetchConstante(constante, num2Input);
+                        } else {
+                            fetchConstante(constante, num1Input);
+                        }
+                    } else {
+                        fetchConstante(constante, numUnarioInput);
+                    }
                 });
             });
             
@@ -268,6 +507,23 @@
                     });
             }
             
+            // Obtener valor de una constante matemática
+            function fetchConstante(constante, inputElement) {
+                fetch('/api/constantes')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data[constante] !== undefined) {
+                            inputElement.value = data[constante];
+                        } else {
+                            alert('Constante no disponible');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al obtener constante');
+                    });
+            }
+            
             // Realizar cálculo
             function performCalculation(operation) {
                 // Preparar datos para enviar al servidor
@@ -275,32 +531,79 @@
                     operacion: operation
                 };
                 
-                if (operacionActual.esBinaria) {
-                    // Validar que se ingresaron números
-                    const num1 = parseFloat(num1Input.value);
-                    const num2 = parseFloat(num2Input.value);
-                    
-                    if (isNaN(num1) || isNaN(num2)) {
-                        alert('Por favor ingrese números válidos');
+                // Dependiendo del tipo de operación, preparamos los datos adecuados
+                if (operacionActual.tipo === 'normal') {
+                    if (operacionActual.esBinaria) {
+                        // Validar que se ingresaron números
+                        const num1 = parseFloat(num1Input.value);
+                        const num2 = parseFloat(num2Input.value);
+                        
+                        if (isNaN(num1) || isNaN(num2)) {
+                            alert('Por favor ingrese números válidos');
+                            return;
+                        }
+                        
+                        data.num1 = num1;
+                        data.num2 = num2;
+                    } else {
+                        // Validar que se ingresó un número
+                        const numUnario = parseFloat(numUnarioInput.value);
+                        
+                        if (isNaN(numUnario)) {
+                            alert('Por favor ingrese un número válido');
+                            return;
+                        }
+                        
+                        data.num1 = numUnario;
+                        
+                        // Añadir configuración de radianes/grados para funciones trigonométricas
+                        if (['seno', 'coseno', 'tangente', 'arcoseno', 'arcocoseno', 'arcotangente'].includes(operation)) {
+                            data.en_radianes = !operacionActual.enGrados;
+                        }
+                    }
+                } else if (operacionActual.tipo === 'estadistica') {
+                    // Procesar los valores para operaciones estadísticas
+                    const valoresTexto = valoresEstadisticosInput.value.trim();
+                    if (!valoresTexto) {
+                        alert('Por favor ingrese valores para el cálculo estadístico');
                         return;
                     }
                     
-                    data.num1 = num1;
-                    data.num2 = num2;
-                } else {
-                    // Validar que se ingresó un número
-                    const numUnario = parseFloat(numUnarioInput.value);
+                    try {
+                        // Convertir texto a array de números
+                        const valores = valoresTexto.split(',')
+                            .map(val => val.trim())
+                            .filter(val => val.length > 0)
+                            .map(val => parseFloat(val));
+                        
+                        if (valores.length === 0 || valores.some(val => isNaN(val))) {
+                            alert('Por favor ingrese una lista válida de números separados por comas');
+                            return;
+                        }
+                        
+                        data.valores = valores;
+                        data.poblacion = checkPoblacion.checked;
+                    } catch (error) {
+                        alert('Error al procesar los valores. Asegúrese de ingresar números separados por comas.');
+                        return;
+                    }
+                } else if (operacionActual.tipo === 'financiera') {
+                    // Validar y procesar datos para cálculos financieros
+                    const principal = parseFloat(principalInput.value);
+                    const tasa = parseFloat(tasaInput.value);
+                    const tiempo = parseFloat(tiempoInput.value);
                     
-                    if (isNaN(numUnario)) {
-                        alert('Por favor ingrese un número válido');
+                    if (isNaN(principal) || isNaN(tasa) || isNaN(tiempo)) {
+                        alert('Por favor ingrese valores numéricos válidos para el cálculo financiero');
                         return;
                     }
                     
-                    data.num1 = numUnario;
+                    data.principal = principal;
+                    data.tasa = tasa;
+                    data.tiempo = tiempo;
                     
-                    // Añadir configuración de radianes/grados para funciones trigonométricas
-                    if (['seno', 'coseno', 'tangente', 'arcoseno', 'arcocoseno', 'arcotangente'].includes(operation)) {
-                        data.en_radianes = !operacionActual.enGrados;
+                    if (operation === 'interes_compuesto') {
+                        data.periodos = parseInt(periodosSelect.value);
                     }
                 }
                 
@@ -311,6 +614,7 @@
                             <span class="visually-hidden">Calculando...</span>
                         </div>
                     </div>`;
+                resultDetails.style.display = 'none';
                 
                 // Enviar la solicitud al servidor
                 fetch('/api/calcular', {
@@ -325,24 +629,15 @@
                     if (data.error) {
                         resultDisplay.textContent = 'Error: ' + data.error;
                         resultContainer.classList.remove('result-active');
+                        resultDetails.style.display = 'none';
                     } else {
                         // Mostrar el resultado con una animación
                         resultContainer.classList.remove('result-active');
                         void resultContainer.offsetWidth; // Truco para reiniciar la animación
                         resultContainer.classList.add('result-active');
                         
-                        // Formatear el resultado si es numérico
-                        if (typeof data.resultado === 'number') {
-                            // Si el número es entero, mostrar sin decimales
-                            if (Number.isInteger(data.resultado)) {
-                                resultDisplay.textContent = data.resultado;
-                            } else {
-                                // Si tiene muchos decimales, limitar a 8
-                                resultDisplay.textContent = Number(data.resultado.toFixed(8));
-                            }
-                        } else {
-                            resultDisplay.textContent = data.resultado;
-                        }
+                        // Formatear y mostrar el resultado
+                        displayResult(data);
                         
                         // Actualizar el historial
                         fetchHistory();
@@ -352,7 +647,54 @@
                     resultDisplay.textContent = 'Error al realizar la operación';
                     console.error('Error:', error);
                     resultContainer.classList.remove('result-active');
+                    resultDetails.style.display = 'none';
                 });
+            }
+            
+            // Mostrar el resultado formateado
+            function displayResult(data) {
+                if (typeof data.resultado === 'object') {
+                    // Para resultados complejos (como conversión a fracción o notación científica)
+                    if (data.operacion === 'decimal_a_fraccion') {
+                        resultDisplay.textContent = data.resultado.fraccion;
+                        resultDetails.textContent = `Numerador: ${data.resultado.numerador}, Denominador: ${data.resultado.denominador}`;
+                        resultDetails.style.display = 'block';
+                    } else if (data.operacion === 'notacion_cientifica') {
+                        resultDisplay.textContent = data.resultado.notacion;
+                        resultDetails.textContent = `Coeficiente: ${data.resultado.coeficiente}, Exponente: ${data.resultado.exponente}`;
+                        resultDetails.style.display = 'block';
+                    } else if (data.operacion.startsWith('interes_')) {
+                        resultDisplay.textContent = data.resultado.monto_final.toFixed(2);
+                        resultDetails.innerHTML = `
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <strong>Capital inicial:</strong> ${data.principal.toFixed(2)}
+                                </div>
+                                <div class="col-6">
+                                    <strong>Interés generado:</strong> ${data.resultado.interes.toFixed(2)}
+                                </div>
+                            </div>
+                        `;
+                        resultDetails.style.display = 'block';
+                    } else {
+                        // Para otros resultados de tipo objeto
+                        resultDisplay.textContent = JSON.stringify(data.resultado);
+                        resultDetails.style.display = 'none';
+                    }
+                } else if (typeof data.resultado === 'number') {
+                    // Para resultados numéricos
+                    if (Number.isInteger(data.resultado)) {
+                        resultDisplay.textContent = data.resultado;
+                    } else {
+                        // Si tiene muchos decimales, limitar a 8
+                        resultDisplay.textContent = Number(data.resultado.toFixed(8));
+                    }
+                    resultDetails.style.display = 'none';
+                } else {
+                    // Para otros tipos de resultados (string, etc.)
+                    resultDisplay.textContent = data.resultado;
+                    resultDetails.style.display = 'none';
+                }
             }
             
             // Obtener historial
@@ -399,76 +741,217 @@
                         data.reverse().forEach(item => {
                             const tr = document.createElement('tr');
                             
-                            // Formatear la operación
+                            // Formatear la operación y expresión
                             let operacionTexto;
                             let expresion;
                             
-                            // Manejar diferentes tipos de operaciones (binarias y unarias)
-                            switch (item.operacion) {
-                                case 'suma': 
-                                    operacionTexto = 'Suma';
-                                    expresion = `${item.num1} + ${item.num2}`;
-                                    break;
-                                case 'resta': 
-                                    operacionTexto = 'Resta';
-                                    expresion = `${item.num1} - ${item.num2}`;
-                                    break;
-                                case 'multiplicacion': 
-                                    operacionTexto = 'Multiplicación';
-                                    expresion = `${item.num1} × ${item.num2}`;
-                                    break;
-                                case 'division': 
-                                    operacionTexto = 'División';
-                                    expresion = `${item.num1} ÷ ${item.num2}`;
-                                    break;
-                                case 'potencia':
-                                    operacionTexto = 'Potencia';
-                                    expresion = `${item.num1}<sup>${item.num2}</sup>`;
-                                    break;
-                                case 'raiz':
-                                    operacionTexto = 'Raíz';
-                                    expresion = `<sup>${item.num2}</sup>√${item.num1}`;
-                                    break;
-                                case 'logaritmo':
-                                    operacionTexto = 'Logaritmo';
-                                    expresion = `log<sub>${item.num2}</sub>(${item.num1})`;
-                                    break;
-                                case 'seno':
-                                    operacionTexto = 'Seno';
-                                    expresion = `sin(${item.num1}${item.en_radianes ? ' rad' : '°'})`;
-                                    break;
-                                case 'coseno':
-                                    operacionTexto = 'Coseno';
-                                    expresion = `cos(${item.num1}${item.en_radianes ? ' rad' : '°'})`;
-                                    break;
-                                case 'tangente':
-                                    operacionTexto = 'Tangente';
-                                    expresion = `tan(${item.num1}${item.en_radianes ? ' rad' : '°'})`;
-                                    break;
-                                case 'arcoseno':
-                                    operacionTexto = 'Arcoseno';
-                                    expresion = `arcsin(${item.num1})`;
-                                    break;
-                                case 'arcocoseno':
-                                    operacionTexto = 'Arcocoseno';
-                                    expresion = `arccos(${item.num1})`;
-                                    break;
-                                case 'arcotangente':
-                                    operacionTexto = 'Arcotangente';
-                                    expresion = `arctan(${item.num1})`;
-                                    break;
-                                case 'factorial':
-                                    operacionTexto = 'Factorial';
-                                    expresion = `${item.num1}!`;
-                                    break;
-                                default: 
-                                    operacionTexto = item.operacion;
-                                    expresion = item.num2 ? `${item.num1}, ${item.num2}` : `${item.num1}`;
+                            // Determinar el formato según el tipo de operación
+                            if (item.valores) {
+                                // Operaciones estadísticas
+                                const valoresTexto = item.valores.length > 3 
+                                    ? `[${item.valores.slice(0, 3).join(', ')}, ...]` 
+                                    : `[${item.valores.join(', ')}]`;
+                                
+                                switch (item.operacion) {
+                                    case 'media':
+                                        operacionTexto = 'Media';
+                                        expresion = `Mean(${valoresTexto})`;
+                                        break;
+                                    case 'mediana':
+                                        operacionTexto = 'Mediana';
+                                        expresion = `Median(${valoresTexto})`;
+                                        break;
+                                    case 'moda':
+                                        operacionTexto = 'Moda';
+                                        expresion = `Mode(${valoresTexto})`;
+                                        break;
+                                    case 'desviacion_estandar_poblacional':
+                                        operacionTexto = 'Desviación estándar (pob)';
+                                        expresion = `σ(${valoresTexto})`;
+                                        break;
+                                    case 'desviacion_estandar_muestral':
+                                        operacionTexto = 'Desviación estándar (mue)';
+                                        expresion = `s(${valoresTexto})`;
+                                        break;
+                                    case 'varianza_poblacional':
+                                        operacionTexto = 'Varianza (pob)';
+                                        expresion = `σ²(${valoresTexto})`;
+                                        break;
+                                    case 'varianza_muestral':
+                                        operacionTexto = 'Varianza (mue)';
+                                        expresion = `s²(${valoresTexto})`;
+                                        break;
+                                    default:
+                                        operacionTexto = item.operacion;
+                                        expresion = valoresTexto;
+                                }
+                            } else if (item.principal !== undefined) {
+                                // Operaciones financieras
+                                switch (item.operacion) {
+                                    case 'interes_simple':
+                                        operacionTexto = 'Interés Simple';
+                                        expresion = `P=${item.principal}, r=${item.tasa}%, t=${item.tiempo}`;
+                                        break;
+                                    case 'interes_compuesto':
+                                        operacionTexto = 'Interés Compuesto';
+                                        expresion = `P=${item.principal}, r=${item.tasa}%, t=${item.tiempo}, n=${item.periodos_capitalizacion || 1}`;
+                                        break;
+                                    default:
+                                        operacionTexto = item.operacion;
+                                        expresion = `${item.principal}, ${item.tasa}, ${item.tiempo}`;
+                                }
+                            } else {
+                                // Operaciones unarias y binarias normales
+                                switch (item.operacion) {
+                                    case 'suma': 
+                                        operacionTexto = 'Suma';
+                                        expresion = `${item.num1} + ${item.num2}`;
+                                        break;
+                                    case 'resta': 
+                                        operacionTexto = 'Resta';
+                                        expresion = `${item.num1} - ${item.num2}`;
+                                        break;
+                                    case 'multiplicacion': 
+                                        operacionTexto = 'Multiplicación';
+                                        expresion = `${item.num1} × ${item.num2}`;
+                                        break;
+                                    case 'division': 
+                                        operacionTexto = 'División';
+                                        expresion = `${item.num1} ÷ ${item.num2}`;
+                                        break;
+                                    case 'potencia':
+                                        operacionTexto = 'Potencia';
+                                        expresion = `${item.num1}<sup>${item.num2}</sup>`;
+                                        break;
+                                    case 'raiz':
+                                        operacionTexto = 'Raíz';
+                                        expresion = `<sup>${item.num2}</sup>√${item.num1}`;
+                                        break;
+                                    case 'logaritmo':
+                                        operacionTexto = 'Logaritmo';
+                                        expresion = `log<sub>${item.num2}</sub>(${item.num1})`;
+                                        break;
+                                    case 'logaritmo_natural':
+                                        operacionTexto = 'Logaritmo Natural';
+                                        expresion = `ln(${item.num1})`;
+                                        break;
+                                    case 'logaritmo_base10':
+                                        operacionTexto = 'Logaritmo Base 10';
+                                        expresion = `log(${item.num1})`;
+                                        break;
+                                    case 'seno':
+                                        operacionTexto = 'Seno';
+                                        expresion = `sin(${item.num1}${item.en_radianes ? ' rad' : '°'})`;
+                                        break;
+                                    case 'coseno':
+                                        operacionTexto = 'Coseno';
+                                        expresion = `cos(${item.num1}${item.en_radianes ? ' rad' : '°'})`;
+                                        break;
+                                    case 'tangente':
+                                        operacionTexto = 'Tangente';
+                                        expresion = `tan(${item.num1}${item.en_radianes ? ' rad' : '°'})`;
+                                        break;
+                                    case 'arcoseno':
+                                        operacionTexto = 'Arcoseno';
+                                        expresion = `arcsin(${item.num1})`;
+                                        break;
+                                    case 'arcocoseno':
+                                        operacionTexto = 'Arcocoseno';
+                                        expresion = `arccos(${item.num1})`;
+                                        break;
+                                    case 'arcotangente':
+                                        operacionTexto = 'Arcotangente';
+                                        expresion = `arctan(${item.num1})`;
+                                        break;
+                                    case 'arcotangente2':
+                                        operacionTexto = 'Arcotangente2';
+                                        expresion = `arctan2(${item.num1}, ${item.num2})`;
+                                        break;
+                                    case 'seno_hiperbolico':
+                                        operacionTexto = 'Seno Hiperbólico';
+                                        expresion = `sinh(${item.num1})`;
+                                        break;
+                                    case 'coseno_hiperbolico':
+                                        operacionTexto = 'Coseno Hiperbólico';
+                                        expresion = `cosh(${item.num1})`;
+                                        break;
+                                    case 'tangente_hiperbolica':
+                                        operacionTexto = 'Tangente Hiperbólica';
+                                        expresion = `tanh(${item.num1})`;
+                                        break;
+                                    case 'factorial':
+                                        operacionTexto = 'Factorial';
+                                        expresion = `${item.num1}!`;
+                                        break;
+                                    case 'modulo':
+                                        operacionTexto = 'Módulo';
+                                        expresion = `${item.num1} mod ${item.num2}`;
+                                        break;
+                                    case 'valor_absoluto':
+                                        operacionTexto = 'Valor Absoluto';
+                                        expresion = `|${item.num1}|`;
+                                        break;
+                                    case 'exponencial':
+                                        operacionTexto = 'Exponencial';
+                                        expresion = `e<sup>${item.num1}</sup>`;
+                                        break;
+                                    case 'potencia_10':
+                                        operacionTexto = 'Potencia de 10';
+                                        expresion = `10<sup>${item.num1}</sup>`;
+                                        break;
+                                    case 'reciproco':
+                                        operacionTexto = 'Recíproco';
+                                        expresion = `1/${item.num1}`;
+                                        break;
+                                    case 'combinatoria':
+                                        operacionTexto = 'Combinatoria';
+                                        expresion = `C(${item.num1}, ${item.num2})`;
+                                        break;
+                                    case 'permutacion':
+                                        operacionTexto = 'Permutación';
+                                        expresion = `P(${item.num1}, ${item.num2})`;
+                                        break;
+                                    case 'decimal_a_fraccion':
+                                        operacionTexto = 'Decimal a Fracción';
+                                        expresion = `Dec→Frac(${item.num1})`;
+                                        break;
+                                    case 'fraccion_a_decimal':
+                                        operacionTexto = 'Fracción a Decimal';
+                                        expresion = `${item.num1}/${item.num2}`;
+                                        break;
+                                    case 'porcentaje':
+                                        operacionTexto = 'Porcentaje';
+                                        expresion = `${item.num1}% de ${item.num2}`;
+                                        break;
+                                    case 'cambio_porcentual':
+                                        operacionTexto = 'Cambio Porcentual';
+                                        expresion = `Cambio % de ${item.num1} a ${item.num2}`;
+                                        break;
+                                    case 'grados_a_radianes':
+                                        operacionTexto = 'Grados a Radianes';
+                                        expresion = `${item.num1}° → rad`;
+                                        break;
+                                    case 'radianes_a_grados':
+                                        operacionTexto = 'Radianes a Grados';
+                                        expresion = `${item.num1} rad → °`;
+                                        break;
+                                    default: 
+                                        operacionTexto = item.operacion;
+                                        expresion = item.num2 ? `${item.num1}, ${item.num2}` : `${item.num1}`;
+                                }
                             }
                             
                             // Formatear el resultado
                             let resultado;
-                            if (typeof item.resultado === 'number') {
+                            if (typeof item.resultado === 'object') {
+                                if (item.operacion.startsWith('interes_')) {
+                                    resultado = `${item.resultado.monto_final.toFixed(2)} (Int: ${item.resultado.interes.toFixed(2)})`;
+                                } else if (item.operacion === 'decimal_a_fraccion') {
+                                    resultado = item.resultado.fraccion;
+                                } else {
+                                    resultado = JSON.stringify(item.resultado);
+                                }
+                            } else if (typeof item.resultado === 'number') {
                                 if (Number.isInteger(item.resultado)) {
                                     resultado = item.resultado;
                                 } else {

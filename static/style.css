@@ -1,56 +1,90 @@
-/* Estilos mejorados para la Calculadora Científica RMI Web - Paleta: Rosa, Negro, Morado */
+/* Estilos mejorados para la Calculadora Científica CASIO Style - Paleta: Azul marino, Negro, Gris */
 
 :root {
     --color-black: #1a1a1a;
     --color-dark-gray: #222222;
-    --color-purple: #9c27b0;
-    --color-purple-light: #bb86fc;
-    --color-purple-dark: #6a0080;
-    --color-pink: #ff4081;
-    --color-pink-light: #ff80ab;
-    --color-pink-dark: #c51162;
+    --color-blue: #0066cc;
+    --color-blue-light: #4d94ff;
+    --color-blue-dark: #003d7a;
+    --color-accent: #ff9900;
+    --color-accent-light: #ffcc80;
+    --color-accent-dark: #cc7a00;
     --color-white: #f5f5f5;
     --color-gray-light: #e0e0e0;
+    --color-casio-bg: #d4e4f7;
+    --color-casio-btn: #424f5a;
+    --color-casio-solar: #605d54;
 }
 
 body {
-    background-color: var(--color-black);
+    background: linear-gradient(135deg, #000428, #004e92);
     color: var(--color-white);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding-top: 2rem;
     padding-bottom: 2rem;
+    min-height: 100vh;
 }
 
 .calculator-container {
     background-color: var(--color-dark-gray);
     border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(156, 39, 176, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 102, 204, 0.3);
     padding: 2rem;
     margin-bottom: 2rem;
-    border: 1px solid var(--color-purple-light);
+    border: 1px solid var(--color-blue-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.calculator-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: linear-gradient(90deg, #0066cc, #4d94ff, #003d7a, #0066cc);
+    background-size: 300% 100%;
+    animation: gradientBorder 6s ease infinite;
+}
+
+@keyframes gradientBorder {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .calculator-container h1 {
-    color: var(--color-pink);
+    color: var(--color-accent);
     margin-bottom: 1.5rem;
     text-align: center;
     font-weight: 600;
     letter-spacing: 1px;
-    text-shadow: 0 0 10px rgba(255, 64, 129, 0.5);
+    text-shadow: 0 0 10px rgba(255, 153, 0, 0.5);
+}
+
+.calculator-container h1::before {
+    content: "CASIO";
+    display: block;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    color: var(--color-blue-light);
+    font-weight: bold;
+    margin-bottom: 0.3rem;
 }
 
 .card {
     background-color: var(--color-dark-gray);
-    border: 1px solid var(--color-purple);
+    border: 1px solid var(--color-blue);
     border-radius: 10px;
-    box-shadow: 0 4px 16px rgba(187, 134, 252, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 102, 204, 0.2);
     margin-bottom: 1.5rem;
 }
 
 .card-header {
-    background-color: var(--color-purple-dark);
+    background-color: var(--color-blue-dark);
     color: var(--color-white);
-    border-bottom: 1px solid var(--color-purple);
+    border-bottom: 1px solid var(--color-blue);
     border-radius: 10px 10px 0 0 !important;
     padding: 0.75rem 1.25rem;
 }
@@ -68,9 +102,9 @@ body {
 }
 
 .alert-info {
-    background-color: rgba(187, 134, 252, 0.2);
-    color: var(--color-purple-light);
-    border-left: 4px solid var(--color-purple);
+    background-color: rgba(0, 102, 204, 0.2);
+    color: var(--color-blue-light);
+    border-left: 4px solid var(--color-blue);
 }
 
 .alert-success {
@@ -81,14 +115,14 @@ body {
 
 .alert-danger {
     background-color: rgba(255, 64, 129, 0.2);
-    color: var(--color-pink);
-    border-left: 4px solid var(--color-pink);
+    color: #ff4081;
+    border-left: 4px solid #ff4081;
 }
 
 /* Formulario y campos de entrada */
 .form-control {
     background-color: var(--color-black);
-    border: 2px solid var(--color-purple-light);
+    border: 2px solid var(--color-blue-light);
     border-radius: 8px;
     color: var(--color-white);
     padding: 0.75rem 1rem;
@@ -97,8 +131,8 @@ body {
 
 .form-control:focus {
     background-color: var(--color-black);
-    border-color: var(--color-pink);
-    box-shadow: 0 0 0 0.2rem rgba(255, 64, 129, 0.25);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.2rem rgba(255, 153, 0, 0.25);
     color: var(--color-white);
 }
 
@@ -110,57 +144,95 @@ body {
 
 /* Botones */
 .btn-primary {
-    background: linear-gradient(45deg, var(--color-purple), var(--color-purple-light));
+    background: linear-gradient(45deg, var(--color-blue-dark), var(--color-blue));
     border: none;
     border-radius: 8px;
     color: var(--color-white);
     font-weight: 600;
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 1rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 0.85rem;
 }
 
 .btn-primary:hover, .btn-primary:focus {
-    background: linear-gradient(45deg, var(--color-purple-dark), var(--color-purple));
+    background: linear-gradient(45deg, var(--color-blue), var(--color-blue-light));
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-outline-secondary {
-    border: 1px solid var(--color-pink-light);
-    color: var(--color-pink-light);
+    border: 1px solid var(--color-accent-light);
+    color: var(--color-accent-light);
     background: transparent;
     transition: all 0.3s ease;
 }
 
 .btn-outline-secondary:hover, .btn-outline-secondary:focus {
-    background-color: var(--color-pink);
-    border-color: var(--color-pink);
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
     color: var(--color-white);
+}
+
+.btn-outline-primary {
+    border: 1px solid var(--color-blue-light);
+    color: var(--color-blue-light);
+    background-color: rgba(0, 102, 204, 0.1);
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+    background-color: var(--color-blue);
+    border-color: var(--color-blue);
+    color: var(--color-white);
+    transform: scale(1.05);
 }
 
 /* Contenedor de resultado */
 .result-container {
-    background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(255, 64, 129, 0.2));
+    background: linear-gradient(135deg, rgba(0, 102, 204, 0.2), rgba(255, 153, 0, 0.2));
     border-radius: 10px;
-    border-left: 5px solid var(--color-pink);
+    border-left: 5px solid var(--color-accent);
     transition: all 0.3s ease;
     padding: 1.5rem;
     margin-top: 1.5rem;
+    position: relative;
+}
+
+.result-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 20px;
+    background-color: var(--color-casio-solar);
+    border-radius: 0 10px 0 10px;
 }
 
 #result {
     font-size: 2.5rem;
     font-weight: bold;
-    color: var(--color-pink);
+    color: var(--color-accent);
     text-align: center;
     margin-top: 0.5rem;
-    text-shadow: 0 0 10px rgba(255, 64, 129, 0.3);
+    text-shadow: 0 0 10px rgba(255, 153, 0, 0.3);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+}
+
+#result-details {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 0.5rem;
+    color: var(--color-gray-light);
+    font-size: 0.85rem;
 }
 
 /* Efecto para cuando hay un resultado */
 .result-active {
-    box-shadow: 0 0 20px rgba(255, 64, 129, 0.4);
+    box-shadow: 0 0 20px rgba(255, 153, 0, 0.4);
 }
 
 /* Historial */
@@ -181,7 +253,7 @@ body {
 }
 
 #history-container::-webkit-scrollbar-thumb {
-    background-color: var(--color-purple);
+    background-color: var(--color-blue);
     border-radius: 10px;
 }
 
@@ -192,19 +264,19 @@ body {
 
 .table th {
     border-top: none;
-    border-bottom: 2px solid var(--color-purple);
-    color: var(--color-pink-light);
+    border-bottom: 2px solid var(--color-blue);
+    color: var(--color-accent-light);
     font-weight: 600;
     padding: 0.75rem;
 }
 
 .table td {
-    border-top: 1px solid rgba(156, 39, 176, 0.3);
+    border-top: 1px solid rgba(0, 102, 204, 0.3);
     padding: 0.75rem;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(156, 39, 176, 0.1);
+    background-color: rgba(0, 102, 204, 0.1);
 }
 
 /* Animaciones */
@@ -219,7 +291,7 @@ body {
 
 /* Estilos para pestañas de operaciones */
 .nav-tabs {
-    border-bottom: 1px solid var(--color-purple);
+    border-bottom: 1px solid var(--color-blue);
 }
 
 .nav-tabs .nav-link {
@@ -230,28 +302,29 @@ body {
     padding: 0.5rem 1rem;
     margin-right: 0.5rem;
     transition: all 0.3s ease;
+    font-size: 0.85rem;
 }
 
 .nav-tabs .nav-link:hover {
-    color: var(--color-pink-light);
+    color: var(--color-accent-light);
     border-color: transparent;
 }
 
 .nav-tabs .nav-link.active {
-    color: var(--color-pink);
+    color: var(--color-accent);
     background-color: transparent;
-    border-bottom: 3px solid var(--color-pink);
+    border-bottom: 3px solid var(--color-accent);
 }
 
 /* Estilos para switch de modo */
 .form-check-input {
     background-color: var(--color-dark-gray);
-    border-color: var(--color-purple-light);
+    border-color: var(--color-blue-light);
 }
 
 .form-check-input:checked {
-    background-color: var(--color-pink);
-    border-color: var(--color-pink);
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
 }
 
 .form-check-label {
@@ -259,70 +332,8 @@ body {
     font-weight: 500;
 }
 
-/* Estilos responsivos */
-@media (max-width: 768px) {
-    .operation-btn {
-        font-size: 0.8rem;
-        padding: 0.5rem 0.3rem;
-    }
-    
-    .d-flex.justify-content-between {
-        flex-wrap: wrap;
-    }
-    
-    .operation-btn {
-        flex: 1 0 45%;
-        margin-bottom: 0.5rem;
-    }
-
-    #result {
-        font-size: 2rem;
-    }
-    
-    .tab-content .operation-btn {
-        flex: 1 0 30%;
-        font-size: 0.75rem;
-        padding: 0.5rem 0.25rem;
-    }
-}
-
-/* Botones de operaciones especiales */
-.operation-btn {
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-
-.operation-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, var(--color-purple-dark), var(--color-pink-dark));
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.3s ease;
-}
-
-.operation-btn:hover::before {
-    opacity: 1;
-}
-
-/* Efecto de brillo para los bordes */
-@keyframes borderGlow {
-    0% { box-shadow: 0 0 5px rgba(255, 64, 129, 0.5), 0 0 10px rgba(156, 39, 176, 0.3); }
-    50% { box-shadow: 0 0 10px rgba(255, 64, 129, 0.8), 0 0 20px rgba(156, 39, 176, 0.6); }
-    100% { box-shadow: 0 0 5px rgba(255, 64, 129, 0.5), 0 0 10px rgba(156, 39, 176, 0.3); }
-}
-
-.calculator-container {
-    animation: borderGlow 4s infinite;
-}
-
-/* Estilos para los botones científicos */
-#advanced .operation-btn i, #trig .operation-btn i {
+/* Operaciones matemáticas especiales */
+.operation-btn i {
     font-style: normal;
     font-family: 'Times New Roman', Times, serif;
 }
@@ -344,4 +355,151 @@ body {
     margin-left: 0.5rem;
     font-size: 0.9rem;
     color: var(--color-gray-light);
+}
+
+/* Estilo Casio para los botones de operaciones */
+.operation-btn {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-casio-btn);
+    border: none;
+    color: var(--color-white);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    border-radius: 6px;
+}
+
+.operation-btn:hover {
+    transform: translateY(-2px);
+    background-color: #566878;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.operation-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para los botones de constantes */
+.constante-btn {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0.3rem 0.8rem;
+    background-color: rgba(0, 102, 204, 0.1);
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .operation-btn {
+        font-size: 0.7rem;
+        padding: 0.5rem 0.3rem;
+    }
+    
+    .d-flex.justify-content-between {
+        flex-wrap: wrap;
+    }
+    
+    .operation-btn {
+        flex: 1 0 45%;
+        margin-bottom: 0.5rem;
+    }
+
+    #result {
+        font-size: 2rem;
+    }
+    
+    .tab-content .operation-btn {
+        flex: 1 0 30%;
+        font-size: 0.65rem;
+        padding: 0.5rem 0.25rem;
+    }
+    
+    .nav-tabs .nav-link {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.6rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .operation-btn {
+        flex: 1 0 48%;
+    }
+    
+    .tab-content .operation-btn {
+        flex: 1 0 48%;
+    }
+    
+    .calculator-container {
+        padding: 1rem;
+    }
+    
+    .calculator-container h1 {
+        font-size: 1.4rem;
+    }
+}
+
+/* Efecto de "panel solar" en la parte superior de la calculadora */
+.calculator-container::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 2rem;
+    width: 100px;
+    height: 30px;
+    background: linear-gradient(to right, var(--color-casio-solar), #79766c);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+/* Efecto para los botones de operaciones especiales */
+#trig .operation-btn, #advanced .operation-btn {
+    background-color: #2b3d4f;
+}
+
+#financial .operation-btn {
+    background-color: #4d3319;
+}
+
+#stat .operation-btn {
+    background-color: #333333;
+}
+
+/* Estilo para campos financieros y estadísticos */
+#panel-estadistico, #panel-financiero {
+    background-color: rgba(0, 102, 204, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(0, 102, 204, 0.3);
+}
+
+/* Estilo para los select */
+.form-select {
+    background-color: var(--color-black);
+    border: 2px solid var(--color-blue-light);
+    border-radius: 8px;
+    color: var(--color-white);
+    transition: all 0.3s ease;
+}
+
+.form-select:focus {
+    background-color: var(--color-black);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.2rem rgba(255, 153, 0, 0.25);
+    color: var(--color-white);
+}
+
+/* Badges para los resultados de operaciones financieras */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+    margin-left: 0.3rem;
+}
+
+.badge-info {
+    background-color: var(--color-blue);
+    color: var(--color-white);
 }
