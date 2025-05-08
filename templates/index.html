@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora RMI Web</title>
+    <title>Calculadora Científica RMI Web</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <!-- Incluimos Bootstrap para un diseño responsive -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Fuente de Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -18,9 +20,9 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
+            <div class="col-md-10 col-lg-8">
                 <div class="calculator-container fade-in">
-                    <h1 class="text-center mb-4">✨ Calculadora RMI ✨</h1>
+                    <h1 class="text-center mb-4">✨ Calculadora Científica RMI ✨</h1>
                     
                     <!-- Panel de estado de conexión -->
                     <div id="connection-status" class="alert alert-info mb-4">
@@ -36,31 +38,107 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <form id="calculator-form">
-                                <div class="mb-3">
-                                    <label for="num1" class="form-label">Primer número:</label>
-                                    <input type="number" class="form-control" id="num1" required step="any" placeholder="Ingresa un número">
+                                <!-- Selector de modo -->
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="modoAngular">
+                                    <label class="form-check-label" for="modoAngular">
+                                        <span id="modoTexto">Modo: Radianes</span>
+                                    </label>
                                 </div>
                                 
-                                <div class="mb-3">
-                                    <label for="num2" class="form-label">Segundo número:</label>
-                                    <input type="number" class="form-control" id="num2" required step="any" placeholder="Ingresa un número">
+                                <!-- Panel para operaciones unarias -->
+                                <div id="panel-unario" class="mb-3">
+                                    <label for="num-unario" class="form-label">Valor:</label>
+                                    <input type="number" class="form-control" id="num-unario" step="any" placeholder="Ingresa un número">
                                 </div>
                                 
-                                <div class="mb-3">
-                                    <label class="form-label">Operación:</label>
-                                    <div class="d-flex justify-content-between flex-wrap">
-                                        <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="suma">
-                                            <i class="me-1">+</i> Suma
-                                        </button>
-                                        <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="resta">
-                                            <i class="me-1">-</i> Resta
-                                        </button>
-                                        <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="multiplicacion">
-                                            <i class="me-1">×</i> Multiplicación
-                                        </button>
-                                        <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="division">
-                                            <i class="me-1">÷</i> División
-                                        </button>
+                                <!-- Panel para operaciones binarias -->
+                                <div id="panel-binario" class="mb-3">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3 mb-md-0">
+                                            <label for="num1" class="form-label">Primer número:</label>
+                                            <input type="number" class="form-control" id="num1" step="any" placeholder="Ingresa un número">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="num2" class="form-label">Segundo número:</label>
+                                            <input type="number" class="form-control" id="num2" step="any" placeholder="Ingresa un número">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Pestañas para diferentes grupos de operaciones -->
+                                <ul class="nav nav-tabs mb-3" id="operationsTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab" aria-controls="basic" aria-selected="true">Básicas</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="trig-tab" data-bs-toggle="tab" data-bs-target="#trig" type="button" role="tab" aria-controls="trig" aria-selected="false">Trigonométricas</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button" role="tab" aria-controls="advanced" aria-selected="false">Avanzadas</button>
+                                    </li>
+                                </ul>
+                                
+                                <!-- Contenido de las pestañas -->
+                                <div class="tab-content" id="operationsTabContent">
+                                    <!-- Operaciones básicas -->
+                                    <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                                        <div class="d-flex justify-content-between flex-wrap">
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="suma" data-binary="true">
+                                                <i class="me-1">+</i> Suma
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="resta" data-binary="true">
+                                                <i class="me-1">-</i> Resta
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="multiplicacion" data-binary="true">
+                                                <i class="me-1">×</i> Multiplicación
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="division" data-binary="true">
+                                                <i class="me-1">÷</i> División
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Operaciones trigonométricas -->
+                                    <div class="tab-pane fade" id="trig" role="tabpanel" aria-labelledby="trig-tab">
+                                        <div class="d-flex justify-content-between flex-wrap">
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="seno" data-binary="false">
+                                                <i class="me-1">sin</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="coseno" data-binary="false">
+                                                <i class="me-1">cos</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="tangente" data-binary="false">
+                                                <i class="me-1">tan</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="arcoseno" data-binary="false">
+                                                <i class="me-1">arcsin</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="arcocoseno" data-binary="false">
+                                                <i class="me-1">arccos</i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="arcotangente" data-binary="false">
+                                                <i class="me-1">arctan</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Operaciones avanzadas -->
+                                    <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+                                        <div class="d-flex justify-content-between flex-wrap">
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="potencia" data-binary="true">
+                                                <i class="me-1">x<sup>y</sup></i> Potencia
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="raiz" data-binary="true">
+                                                <i class="me-1"><sup>n</sup>√x</i> Raíz
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="logaritmo" data-binary="true">
+                                                <i class="me-1">log<sub>b</sub>(x)</i> Logaritmo
+                                            </button>
+                                            <button type="button" class="btn btn-primary operation-btn mb-2" data-operation="factorial" data-binary="false">
+                                                <i class="me-1">n!</i> Factorial
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -97,6 +175,10 @@
         </div>
     </div>
 
+    <!-- Bootstrap JS y Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Referencias a elementos del DOM
@@ -106,16 +188,45 @@
             const resultContainer = document.querySelector('.result-container');
             const num1Input = document.getElementById('num1');
             const num2Input = document.getElementById('num2');
+            const numUnarioInput = document.getElementById('num-unario');
             const refreshHistoryBtn = document.getElementById('refresh-history');
             const historyContainer = document.getElementById('history-container');
+            const modoAngular = document.getElementById('modoAngular');
+            const modoTexto = document.getElementById('modoTexto');
+            const panelUnario = document.getElementById('panel-unario');
+            const panelBinario = document.getElementById('panel-binario');
+            
+            // Estado inicial para operaciones (binarias por defecto)
+            let operacionActual = {
+                esBinaria: true,
+                enGrados: false
+            };
+            
+            // Ocultar panel unario inicialmente
+            panelUnario.style.display = 'none';
             
             // Verificar la conexión con el servidor
             checkServerConnection();
+            
+            // Configurar cambio entre radianes y grados
+            modoAngular.addEventListener('change', function() {
+                operacionActual.enGrados = this.checked;
+                modoTexto.textContent = this.checked ? 'Modo: Grados' : 'Modo: Radianes';
+            });
             
             // Configurar los botones de operación
             operationBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const operation = this.getAttribute('data-operation');
+                    const esBinaria = this.getAttribute('data-binary') === 'true';
+                    
+                    // Actualizar el estado de la operación
+                    operacionActual.esBinaria = esBinaria;
+                    
+                    // Mostrar el panel correspondiente
+                    panelUnario.style.display = esBinaria ? 'none' : 'block';
+                    panelBinario.style.display = esBinaria ? 'block' : 'none';
+                    
                     performCalculation(operation);
                 });
             });
@@ -159,21 +270,39 @@
             
             // Realizar cálculo
             function performCalculation(operation) {
-                // Validar que se ingresaron números
-                const num1 = parseFloat(num1Input.value);
-                const num2 = parseFloat(num2Input.value);
-                
-                if (isNaN(num1) || isNaN(num2)) {
-                    alert('Por favor ingrese números válidos');
-                    return;
-                }
-                
                 // Preparar datos para enviar al servidor
                 const data = {
-                    operacion: operation,
-                    num1: num1,
-                    num2: num2
+                    operacion: operation
                 };
+                
+                if (operacionActual.esBinaria) {
+                    // Validar que se ingresaron números
+                    const num1 = parseFloat(num1Input.value);
+                    const num2 = parseFloat(num2Input.value);
+                    
+                    if (isNaN(num1) || isNaN(num2)) {
+                        alert('Por favor ingrese números válidos');
+                        return;
+                    }
+                    
+                    data.num1 = num1;
+                    data.num2 = num2;
+                } else {
+                    // Validar que se ingresó un número
+                    const numUnario = parseFloat(numUnarioInput.value);
+                    
+                    if (isNaN(numUnario)) {
+                        alert('Por favor ingrese un número válido');
+                        return;
+                    }
+                    
+                    data.num1 = numUnario;
+                    
+                    // Añadir configuración de radianes/grados para funciones trigonométricas
+                    if (['seno', 'coseno', 'tangente', 'arcoseno', 'arcocoseno', 'arcotangente'].includes(operation)) {
+                        data.en_radianes = !operacionActual.enGrados;
+                    }
+                }
                 
                 // Mostrar un indicador de carga
                 resultDisplay.innerHTML = `
@@ -208,8 +337,8 @@
                             if (Number.isInteger(data.resultado)) {
                                 resultDisplay.textContent = data.resultado;
                             } else {
-                                // Si tiene muchos decimales, limitar a 4
-                                resultDisplay.textContent = Number(data.resultado.toFixed(4));
+                                // Si tiene muchos decimales, limitar a 8
+                                resultDisplay.textContent = Number(data.resultado.toFixed(8));
                             }
                         } else {
                             resultDisplay.textContent = data.resultado;
@@ -272,31 +401,70 @@
                             
                             // Formatear la operación
                             let operacionTexto;
-                            let simbolo;
+                            let expresion;
+                            
+                            // Manejar diferentes tipos de operaciones (binarias y unarias)
                             switch (item.operacion) {
                                 case 'suma': 
-                                    operacionTexto = 'Suma'; 
-                                    simbolo = '+';
+                                    operacionTexto = 'Suma';
+                                    expresion = `${item.num1} + ${item.num2}`;
                                     break;
                                 case 'resta': 
-                                    operacionTexto = 'Resta'; 
-                                    simbolo = '-';
+                                    operacionTexto = 'Resta';
+                                    expresion = `${item.num1} - ${item.num2}`;
                                     break;
                                 case 'multiplicacion': 
-                                    operacionTexto = 'Multiplicación'; 
-                                    simbolo = '×';
+                                    operacionTexto = 'Multiplicación';
+                                    expresion = `${item.num1} × ${item.num2}`;
                                     break;
                                 case 'division': 
-                                    operacionTexto = 'División'; 
-                                    simbolo = '÷';
+                                    operacionTexto = 'División';
+                                    expresion = `${item.num1} ÷ ${item.num2}`;
+                                    break;
+                                case 'potencia':
+                                    operacionTexto = 'Potencia';
+                                    expresion = `${item.num1}<sup>${item.num2}</sup>`;
+                                    break;
+                                case 'raiz':
+                                    operacionTexto = 'Raíz';
+                                    expresion = `<sup>${item.num2}</sup>√${item.num1}`;
+                                    break;
+                                case 'logaritmo':
+                                    operacionTexto = 'Logaritmo';
+                                    expresion = `log<sub>${item.num2}</sub>(${item.num1})`;
+                                    break;
+                                case 'seno':
+                                    operacionTexto = 'Seno';
+                                    expresion = `sin(${item.num1}${item.en_radianes ? ' rad' : '°'})`;
+                                    break;
+                                case 'coseno':
+                                    operacionTexto = 'Coseno';
+                                    expresion = `cos(${item.num1}${item.en_radianes ? ' rad' : '°'})`;
+                                    break;
+                                case 'tangente':
+                                    operacionTexto = 'Tangente';
+                                    expresion = `tan(${item.num1}${item.en_radianes ? ' rad' : '°'})`;
+                                    break;
+                                case 'arcoseno':
+                                    operacionTexto = 'Arcoseno';
+                                    expresion = `arcsin(${item.num1})`;
+                                    break;
+                                case 'arcocoseno':
+                                    operacionTexto = 'Arcocoseno';
+                                    expresion = `arccos(${item.num1})`;
+                                    break;
+                                case 'arcotangente':
+                                    operacionTexto = 'Arcotangente';
+                                    expresion = `arctan(${item.num1})`;
+                                    break;
+                                case 'factorial':
+                                    operacionTexto = 'Factorial';
+                                    expresion = `${item.num1}!`;
                                     break;
                                 default: 
                                     operacionTexto = item.operacion;
-                                    simbolo = '?';
+                                    expresion = item.num2 ? `${item.num1}, ${item.num2}` : `${item.num1}`;
                             }
-                            
-                            // Formatear la expresión
-                            const expresion = `${item.num1} ${simbolo} ${item.num2}`;
                             
                             // Formatear el resultado
                             let resultado;
@@ -304,7 +472,7 @@
                                 if (Number.isInteger(item.resultado)) {
                                     resultado = item.resultado;
                                 } else {
-                                    resultado = Number(item.resultado.toFixed(4));
+                                    resultado = Number(item.resultado.toFixed(8));
                                 }
                             } else {
                                 resultado = item.resultado;

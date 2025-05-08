@@ -1,4 +1,4 @@
-/* Estilos mejorados para la Calculadora RMI Web - Paleta: Rosa, Negro, Morado */
+/* Estilos mejorados para la Calculadora Científica RMI Web - Paleta: Rosa, Negro, Morado */
 
 :root {
     --color-black: #1a1a1a;
@@ -217,6 +217,48 @@ body {
     animation: fadeIn 0.5s ease forwards;
 }
 
+/* Estilos para pestañas de operaciones */
+.nav-tabs {
+    border-bottom: 1px solid var(--color-purple);
+}
+
+.nav-tabs .nav-link {
+    color: var(--color-white);
+    border: none;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--color-pink-light);
+    border-color: transparent;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--color-pink);
+    background-color: transparent;
+    border-bottom: 3px solid var(--color-pink);
+}
+
+/* Estilos para switch de modo */
+.form-check-input {
+    background-color: var(--color-dark-gray);
+    border-color: var(--color-purple-light);
+}
+
+.form-check-input:checked {
+    background-color: var(--color-pink);
+    border-color: var(--color-pink);
+}
+
+.form-check-label {
+    color: var(--color-white);
+    font-weight: 500;
+}
+
 /* Estilos responsivos */
 @media (max-width: 768px) {
     .operation-btn {
@@ -235,6 +277,12 @@ body {
 
     #result {
         font-size: 2rem;
+    }
+    
+    .tab-content .operation-btn {
+        flex: 1 0 30%;
+        font-size: 0.75rem;
+        padding: 0.5rem 0.25rem;
     }
 }
 
@@ -271,4 +319,29 @@ body {
 
 .calculator-container {
     animation: borderGlow 4s infinite;
+}
+
+/* Estilos para los botones científicos */
+#advanced .operation-btn i, #trig .operation-btn i {
+    font-style: normal;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+/* Estilo para el modo de grados/radianes */
+.form-switch {
+    padding-left: 2.5em;
+    display: flex;
+    align-items: center;
+}
+
+.form-switch .form-check-input {
+    margin-left: -2.5em;
+    width: 2em;
+    height: 1em;
+}
+
+#modoTexto {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-gray-light);
 }
