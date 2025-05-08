@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 # Lista para almacenar el historial de operaciones
 historial_operaciones = []
 
-# Clase de calculadora (similar a la original, pero para uso web)
+# Clase de calculadora 
 class Calculadora:
     def suma(self, a, b):
         logger.info(f"Servidor: Calculando suma de {a} + {b}")
