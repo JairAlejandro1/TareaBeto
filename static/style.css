@@ -136,10 +136,12 @@ body {
     color: var(--color-white);
 }
 
+/* Etiquetas de formulario - ACTUALIZADO A NEGRO */
 .form-label {
-    color: var(--color-gray-light);
-    font-weight: 500;
+    color: black; /* Cambiado a blanco puro para máximo contraste */
+    font-weight: 600;
     margin-bottom: 0.5rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Sombra para mejorar legibilidad */
 }
 
 /* Botones */
@@ -289,13 +291,13 @@ body {
     animation: fadeIn 0.5s ease forwards;
 }
 
-/* Estilos para pestañas de operaciones */
+/* Estilos para pestañas de operaciones - ACTUALIZADO A NEGRO */
 .nav-tabs {
     border-bottom: 1px solid var(--color-blue);
 }
 
 .nav-tabs .nav-link {
-    color: var(--color-white);
+    color: #000000; /* Cambiado a negro */
     border: none;
     border-bottom: 3px solid transparent;
     border-radius: 0;
@@ -303,20 +305,25 @@ body {
     margin-right: 0.5rem;
     transition: all 0.3s ease;
     font-size: 0.85rem;
+    font-weight: 700; /* Haciendo el texto más grueso */
+    text-shadow: none; /* Eliminando sombra para mejor legibilidad */
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo claro para mejor contraste */
 }
 
 .nav-tabs .nav-link:hover {
-    color: var(--color-accent-light);
+    color: var(--color-accent-dark);
     border-color: transparent;
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo más claro al pasar el mouse */
 }
 
 .nav-tabs .nav-link.active {
-    color: var(--color-accent);
-    background-color: transparent;
+    color: #000000; /* Pestaña activa también en negro */
+    background-color: #ffffff; /* Fondo blanco para la pestaña activa */
     border-bottom: 3px solid var(--color-accent);
+    font-weight: 700;
 }
 
-/* Estilos para switch de modo */
+/* Estilos para switch de modo - ACTUALIZADO */
 .form-check-input {
     background-color: var(--color-dark-gray);
     border-color: var(--color-blue-light);
@@ -328,21 +335,21 @@ body {
 }
 
 .form-check-label {
-    color: var(--color-white);
+    color: #ffffff;
     font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Operaciones matemáticas especiales */
-.operation-btn i {
-    font-style: normal;
-    font-family: 'Times New Roman', Times, serif;
-}
-
-/* Estilo para el modo de grados/radianes */
+/* Estilo para el modo de grados/radianes - ACTUALIZADO A NEGRO */
 .form-switch {
     padding-left: 2.5em;
     display: flex;
     align-items: center;
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo claro para el switch */
+    border-radius: 20px;
+    padding: 5px 10px 5px 30px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-switch .form-check-input {
@@ -354,7 +361,15 @@ body {
 #modoTexto {
     margin-left: 0.5rem;
     font-size: 0.9rem;
-    color: var(--color-gray-light);
+    color: #000000; /* Cambiado a negro */
+    font-weight: 700; /* Más negrita */
+    text-shadow: none; /* Sin sombra */
+}
+
+/* Operaciones matemáticas especiales */
+.operation-btn i {
+    font-style: normal;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 /* Estilo Casio para los botones de operaciones */
@@ -363,13 +378,14 @@ body {
     overflow: hidden;
     background-color: var(--color-casio-btn);
     border: none;
-    color: var(--color-white);
-    font-weight: 500;
+    color: #ffffff;
+    font-weight: 600;
     text-transform: uppercase;
     font-size: 0.75rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     transition: all 0.2s ease;
     border-radius: 6px;
+    letter-spacing: 0.5px;
 }
 
 .operation-btn:hover {
@@ -388,7 +404,12 @@ body {
     font-size: 1.2rem;
     font-weight: bold;
     padding: 0.3rem 0.8rem;
-    background-color: rgba(0, 102, 204, 0.1);
+    background-color: rgba(0, 102, 204, 0.2);
+    color: #ffffff;
+}
+
+.constante-btn:hover {
+    background-color: rgba(0, 102, 204, 0.4);
 }
 
 /* Estilos responsivos */
